@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 namespace Kogane
 {
@@ -48,8 +48,10 @@ namespace Kogane
 			Hide();
 
 			// 範囲を表示するすべての RectTransform を取得します
-			var list = GetAllScenes()
-					.SelectMany( x => x.GetRootGameObjects() )
+			var list = Object
+					.FindObjectsOfType<GameObject>()
+					.Where( c => c.hideFlags == HideFlags.None )
+					.Where( c => c.transform.parent == null )
 					.SelectMany( x => x.GetComponentsInChildren<RectTransform>( true ) )
 					.Where( x => m_predicate( x.gameObject ) )
 				;
@@ -104,21 +106,10 @@ namespace Kogane
 
 				if ( go == null ) continue;
 
-				GameObject.Destroy( go );
+				Object.Destroy( go );
 			}
 
 			m_list.Clear();
-		}
-
-		/// <summary>
-		/// 読み込まれているシーンの一覧を返します
-		/// </summary>
-		private static IEnumerable<Scene> GetAllScenes()
-		{
-			for ( int i = 0; i < SceneManager.sceneCount; i++ )
-			{
-				yield return SceneManager.GetSceneAt( i );
-			}
 		}
 	}
 }

@@ -1,4 +1,4 @@
-# UniRectTransformVisualizer
+# Kogane Rect Transform Visualizer
 
 RectTransform の範囲を可視化する機能
 
